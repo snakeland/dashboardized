@@ -20,17 +20,30 @@ A modular, customizable dashboard platform where users create personalized dashb
 ## Project Structure
 
 ```
-my-dashboard/
+Dashboardized/
  ├─ apps/
  │   ├─ web/               # Vue 3 + Vite + TailwindCSS frontend
- │   └─ api/               # Node.js backend (Express or NestJS)
+ │   │   ├─ src/
+ │   │   │   ├─ views/     # Page components
+ │   │   │   ├─ router/    # Vue Router configuration
+ │   │   │   └─ assets/    # Static assets and styles
+ │   │   ├─ vite.config.ts
+ │   │   └─ vitest.config.ts
+ │   └─ api/               # Node.js Express backend
+ │       ├─ src/
+ │       │   └─ index.ts   # Express server entry point
+ │       ├─ tsconfig.json
+ │       └─ vitest.config.ts
  ├─ packages/
  │   ├─ widgets/           # Independent widget modules
  │   ├─ ui/                # Shared UI components
  │   ├─ utils/             # Helpers, API wrappers
  │   └─ types/             # Shared TypeScript types
- ├─ .github/workflows/     # CI/CD workflows
- └─ turbo.json             # Turborepo configuration
+ ├─ .github/
+ │   └─ copilot-instructions.md  # AI coding guidelines
+ ├─ .changeset/            # Changesets for versioning
+ ├─ turbo.json             # Turborepo pipeline configuration
+ └─ pnpm-workspace.yaml    # pnpm workspace configuration
 ```
 
 ## Getting Started
@@ -44,15 +57,18 @@ my-dashboard/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/dashboardized.git
+git clone https://github.com/snakeland/dashboardized.git
 cd dashboardized
 
 # Install dependencies
 pnpm install
 
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your API keys and configuration
+# Set up environment variables for frontend
+cp apps/web/.env.example apps/web/.env
+
+# Set up environment variables for backend
+cp apps/api/.env.example apps/api/.env
+# Edit .env files with your API keys and configuration
 ```
 
 ### Development
@@ -76,7 +92,12 @@ pnpm build
 
 ## Features
 
-### MVP (Current)
+### Current Status
+- ✅ Turborepo monorepo setup with pnpm workspaces
+- ✅ Vue 3 frontend with Vite, Pinia, Vue Router, TailwindCSS
+- ✅ Express backend with TypeScript
+- ✅ Vitest testing framework with 80% coverage threshold
+- ✅ Changesets for semantic versioning
 - ✅ Project structure and documentation
 - 🚧 Customizable dashboard layout
 - 🚧 Weather widget (Open-Meteo API)
@@ -94,13 +115,20 @@ pnpm build
 
 ## Widget Development
 
-Each widget is self-contained and exposes:
+Each widget in `packages/widgets/` is self-contained and exposes:
 - **UI component** (Vue 3)
 - **`fetchData()`** function for API calls
 - **`aiSummary(data)`** function for AI prompt data
-- Configuration schema
+- Configuration schema and props
 
-See [Widget Development Guide](docs/widget-development.md) for details.
+Widget development workflow:
+1. Create module in `packages/widgets/<widget-name>/`
+2. Implement component, `fetchData()`, `aiSummary()` functions
+3. Add tests (Vitest) meeting 80% coverage threshold
+4. Register widget in widget loader (dynamic import)
+5. Document API dependencies and required env vars
+
+See [AI Coding Instructions](.github/copilot-instructions.md) for detailed guidelines.
 
 ## Contributing
 
