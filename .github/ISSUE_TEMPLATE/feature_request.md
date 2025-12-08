@@ -1,14 +1,5 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
-title: "[FEATURE] "
-labels: enhancement
-assignees: ''
-
----
-
----
-name: Feature
 about: Implement a new feature or capability
 title: '[FEATURE] '
 labels: enhancement
