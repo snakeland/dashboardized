@@ -171,6 +171,12 @@ importers:
 
   packages/widgets:
     dependencies:
+      '@dashboardized/types':
+        specifier: workspace:*
+        version: link:../types
+      '@dashboardized/ui':
+        specifier: workspace:*
+        version: link:../ui
       vue:
         specifier: ^3.4.0
         version: 3.5.25(typescript@5.9.3)

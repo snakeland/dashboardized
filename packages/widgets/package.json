@@ -13,6 +13,10 @@
   "peerDependencies": {
     "vue": "^3.4.0"
   },
+  "dependencies": {
+    "@dashboardized/types": "workspace:*",
+    "@dashboardized/ui": "workspace:*"
+  },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
     "@vue/test-utils": "^2.4.3",
