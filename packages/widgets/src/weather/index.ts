@@ -4,11 +4,14 @@
  * Main entry point for the weather widget module.
  */
 
-// Export the component (will be created in Step 4)
+// Export the component
 export { default as WeatherWidget } from './WeatherWidget.vue'
 
 // Export configuration
 export { weatherWidgetConfig } from './weatherConfig'
+
+// Export AI summary function
+export { aiSummary } from './weatherAI'
 
 // Export types
 export type * from './weatherTypes'
