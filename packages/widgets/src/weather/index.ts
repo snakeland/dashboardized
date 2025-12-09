@@ -23,6 +23,3 @@ export {
   getWeatherForLocation,
   debounce,
 } from './weatherService'
-
-// Export AI summary function
-export { aiSummary } from './weatherAI'

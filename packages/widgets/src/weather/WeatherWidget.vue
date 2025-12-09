@@ -1,34 +1,20 @@
 <template>
   <WidgetErrorBoundary>
-    <div class="weather-widget bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-lg p-6 border border-gray-200">
+    <div class="weather-widget bg-white rounded-2xl shadow-lg p-6 border border-gray-300">
       <!-- Header with Title and Refresh -->
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Weather</h2>
-        <div class="flex items-center gap-3">
-          <span v-if="lastUpdated" class="text-xs text-gray-500 whitespace-nowrap">
+        <h2 class="text-3xl font-bold text-gray-900">Weather</h2>
+        <div class="text-sm text-gray-600">
+          <span v-if="lastUpdated">
             Updated {{ lastUpdatedText }}
           </span>
           <button
             @click="handleRefresh"
             :disabled="isLoading"
-            class="p-2 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            :class="{ 'animate-spin': isLoading }"
+            class="ml-2 text-blue-600 hover:underline disabled:opacity-50"
             aria-label="Refresh weather data"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
+            Refresh
           </button>
         </div>
       </div>
@@ -76,12 +62,11 @@
       </div>
 
       <!-- Selected City Display -->
-      <div v-if="selectedCity" class="mb-6 px-3 py-2 bg-blue-50 rounded-lg border border-blue-200">
-        <div class="flex items-center gap-2 text-sm text-blue-900">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-          </svg>
-          <span class="font-medium">{{ selectedCity.name }}, {{ [selectedCity.admin1, selectedCity.country].filter(Boolean).join(', ') }}</span>
+      <div v-if="selectedCity" class="mb-6 flex items-start gap-2">
+        <span class="text-2xl">📍</span>
+        <div>
+          <p class="text-2xl font-bold text-gray-900">{{ selectedCity.name }}</p>
+          <p class="text-sm text-gray-600">{{ selectedCity.admin1 }}, {{ selectedCity.country }}</p>
         </div>
       </div>
 
@@ -114,39 +99,28 @@
       <!-- Weather Data Display -->
       <div v-else-if="weatherData" class="space-y-6">
         <!-- Current Weather Card -->
-        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-8 text-white shadow-lg">
+        <div class="mb-6">
+          <p class="text-lg text-gray-900 mb-4">{{ todayDateFormatted }}</p>
           <div class="flex items-center justify-between">
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-80" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
-                </svg>
-                <p class="text-sm opacity-90 font-medium">{{ todayDateFormatted }}</p>
+            <div class="flex items-center gap-6">
+              <div class="text-8xl">
+                {{ currentWeatherIcon }}
               </div>
-              <div class="flex items-center gap-3 mb-4">
-                <span class="text-3xl">{{ currentWeatherIcon }}</span>
-                <span class="text-xl font-semibold">{{ currentWeatherText }}</span>
-              </div>
-              <div class="flex items-baseline gap-3">
-                <span class="text-6xl font-bold tracking-tight">{{ Math.round(weatherData.forecast.maxTemperatures[0]) }}°</span>
-                <span class="text-3xl opacity-80 font-medium">/ {{ Math.round(weatherData.forecast.minTemperatures[0]) }}°</span>
+              <div>
+                <p class="text-3xl font-bold text-gray-900 leading-tight">{{ currentWeatherText }}</p>
               </div>
             </div>
-            <div class="hidden sm:block text-8xl opacity-20 ml-4">
-              {{ currentWeatherIcon }}
+            <div class="flex flex-col items-end">
+              <p class="text-7xl font-bold text-gray-900 leading-none">{{ Math.round(weatherData.forecast.maxTemperatures[0]) }}°</p>
+              <p class="text-5xl font-semibold text-gray-600 leading-none mt-2">{{ Math.round(weatherData.forecast.minTemperatures[0]) }}°</p>
             </div>
           </div>
         </div>
 
         <!-- 7-Day Forecast Chart -->
         <div>
-          <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-            </svg>
-            7-Day Forecast
-          </h3>
-          <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <h3 class="text-2xl font-bold text-gray-900 mb-4">📊 7-Day Forecast</h3>
+          <div class="bg-white rounded-lg p-4 border border-gray-200">
             <ChartLine
               :labels="formattedDates"
               :data="weatherData.forecast.maxTemperatures"
@@ -158,31 +132,11 @@
             />
           </div>
         </div>
-
-        <!-- Additional Info -->
-        <div class="grid grid-cols-2 gap-4 text-sm">
-          <div class="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg p-4 border border-red-100">
-            <p class="text-gray-600 text-xs uppercase tracking-wide mb-1 font-medium">High Today</p>
-            <p class="text-3xl font-bold text-red-600">
-              {{ Math.round(weatherData.forecast.maxTemperatures[0]) }}°
-            </p>
-          </div>
-          <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border border-blue-100">
-            <p class="text-gray-600 text-xs uppercase tracking-wide mb-1 font-medium">Low Today</p>
-            <p class="text-3xl font-bold text-blue-600">
-              {{ Math.round(weatherData.forecast.minTemperatures[0]) }}°
-            </p>
-          </div>
-        </div>
       </div>
 
       <!-- Empty State -->
       <div v-else class="text-center py-16 px-4">
-        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-          </svg>
-        </div>
+        <div class="text-6xl mb-4">🌤️</div>
         <h3 class="text-xl font-semibold text-gray-700 mb-2">No Location Selected</h3>
         <p class="text-gray-500">Search for a city above to view weather forecast</p>
       </div>
