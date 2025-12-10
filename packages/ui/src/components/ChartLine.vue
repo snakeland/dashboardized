@@ -14,6 +14,7 @@ import {
   type ChartData,
   type ChartOptions,
 } from 'chart.js'
+import type { Chart } from 'chart.js'
 import { chartColors, chartColorsAlpha, mergeChartOptions } from '../config/chartTheme'
 
 // Register Chart.js components
@@ -53,7 +54,7 @@ const props = withDefaults(defineProps<ChartLineProps>(), {
   height: 300,
 })
 
-const chartRef = ref<InstanceType<typeof Line> | null>(null)
+const chartRef = ref<{ chart: Chart } | null>(null)
 
 /**
  * Prepare chart data with proper styling
@@ -121,7 +122,7 @@ const chartOptions = computed(() => {
   return mergeChartOptions({
     ...props.options,
     maintainAspectRatio: false,
-  })
+  }) as ChartOptions<'line'>
 })
 
 /**

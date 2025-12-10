@@ -33,7 +33,7 @@ onErrorCaptured((error: Error, instance, info) => {
   emit('error', error)
   
   // Log to console in development
-  if (process.env.NODE_ENV !== 'production') {
+  if (import.meta.env.DEV) {
     console.error(`[${props.widgetName}] Error:`, error)
     console.error('Error info:', info)
     console.error('Component instance:', instance)
