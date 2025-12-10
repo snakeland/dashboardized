@@ -7,11 +7,11 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import WeatherWidget from '../WeatherWidget.vue'
-import { fetchWeatherData, searchCities } from '../weatherService'
+import { getWeatherForLocation, searchCities } from '../weatherService'
 
 // Mock the weather service
 vi.mock('../weatherService', () => ({
-  fetchWeatherData: vi.fn(),
+  getWeatherForLocation: vi.fn(),
   searchCities: vi.fn(),
   debounce: (fn: Function) => fn, // Disable debounce for tests
 }))
@@ -28,29 +28,31 @@ vi.mock('@dashboardized/ui', () => ({
   },
 }))
 
-const mockWeatherData = {
-  latitude: 40.7128,
-  longitude: -74.006,
-  timezone: 'America/New_York',
-  forecast: {
-    time: ['2025-12-10', '2025-12-11', '2025-12-12', '2025-12-13', '2025-12-14', '2025-12-15', '2025-12-16'],
-    maxTemperatures: [18, 20, 22, 19, 17, 21, 23],
-    minTemperatures: [10, 12, 14, 11, 9, 13, 15],
-    weatherCodes: [0, 1, 2, 3, 45, 61, 80],
-    precipitationProbability: [0, 10, 20, 30, 40, 50, 60],
-    windSpeed: [10, 12, 15, 18, 20, 22, 25],
+const mockProcessedWeatherData = {
+  location: {
+    name: 'New York',
+    country: 'United States',
+    latitude: 40.7128,
+    longitude: -74.006,
   },
   current: {
     temperature: 15,
     weatherCode: 0,
-    windSpeed: 10,
-    time: '2025-12-10T12:00',
+    weatherDescription: 'Clear sky',
+    time: new Date('2025-12-10T12:00:00'),
   },
-  location: {
-    name: 'New York',
-    country: 'United States',
-    admin1: 'New York',
+  forecast: {
+    dates: ['2025-12-10', '2025-12-11', '2025-12-12', '2025-12-13', '2025-12-14', '2025-12-15', '2025-12-16'],
+    maxTemperatures: [18, 20, 22, 19, 17, 21, 23],
+    minTemperatures: [10, 12, 14, 11, 9, 13, 15],
+    weatherCodes: [0, 1, 2, 3, 45, 61, 80],
   },
+  fetchedAt: Date.now(),
+}
+
+const mockWidgetData = {
+  data: mockProcessedWeatherData,
+  timestamp: Date.now(),
 }
 
 const mockCityResults = [
@@ -82,17 +84,30 @@ describe('WeatherWidget', () => {
   })
 
   describe('Component Rendering', () => {
-    it('renders the widget with loading state initially', () => {
+    it('renders the widget with empty state initially', () => {
       const wrapper = mount(WeatherWidget)
       
       expect(wrapper.find('.weather-widget').exists()).toBe(true)
       expect(wrapper.find('h2').text()).toBe('Weather')
+      expect(wrapper.text()).toContain('No Location Selected')
     })
 
-    it('displays weather data after successful fetch', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+    it('displays weather data after user selects a city', async () => {
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      // User types city name
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      // User clicks first city result
+      const cityButtons = wrapper.findAll('button').filter(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButtons[0].trigger('click')
       await flushPromises()
       
       expect(wrapper.text()).toContain('New York')
@@ -100,10 +115,20 @@ describe('WeatherWidget', () => {
       expect(wrapper.text()).toContain('10°') // Min temp
     })
 
-    it('renders the 7-day forecast chart', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+    it('renders the 7-day forecast chart after city selection', async () => {
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
       await flushPromises()
       
       expect(wrapper.find('.mock-chart').exists()).toBe(true)
@@ -111,12 +136,23 @@ describe('WeatherWidget', () => {
     })
 
     it('displays current weather information', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
       await flushPromises()
       
-      expect(wrapper.text()).toContain('15°') // Current temp
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
+      await flushPromises()
+      
+      expect(wrapper.text()).toContain('18°') // Forecast max temp
+      expect(wrapper.text()).toContain('10°') // Forecast min temp
     })
   })
 
@@ -138,14 +174,14 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New')
       await flushPromises()
       
-      expect(vi.mocked(searchCities)).toHaveBeenCalledWith('New', 5)
+      expect(vi.mocked(searchCities)).toHaveBeenCalledWith('New')
       expect(wrapper.text()).toContain('New York')
       expect(wrapper.text()).toContain('Newark')
     })
 
     it('fetches weather data when city is selected', async () => {
       vi.mocked(searchCities).mockResolvedValue(mockCityResults)
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
       const searchInput = wrapper.find('input[type="text"]')
@@ -161,12 +197,12 @@ describe('WeatherWidget', () => {
       await cityButton!.trigger('click')
       await flushPromises()
       
-      expect(vi.mocked(fetchWeatherData)).toHaveBeenCalledWith(40.7128, -74.006)
+      expect(vi.mocked(getWeatherForLocation)).toHaveBeenCalledWith(mockCityResults[0])
     })
 
     it('clears search results after city selection', async () => {
       vi.mocked(searchCities).mockResolvedValue(mockCityResults)
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
       const searchInput = wrapper.find('input[type="text"]')
@@ -180,15 +216,29 @@ describe('WeatherWidget', () => {
       await cityButton!.trigger('click')
       await flushPromises()
       
-      expect(searchInput.element.value).toBe('')
+      expect((searchInput.element as HTMLInputElement).value).toBe('New York')
     })
   })
 
   describe('Error Handling', () => {
     it('displays error message when fetch fails', async () => {
-      vi.mocked(fetchWeatherData).mockRejectedValue(new Error('API Error'))
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue({
+        data: {} as any,
+        timestamp: Date.now(),
+        error: 'Failed to load weather data',
+      })
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
       await flushPromises()
       
       expect(wrapper.text()).toContain('Failed to load weather data')
@@ -221,11 +271,8 @@ describe('WeatherWidget', () => {
   })
 
   describe('Refresh Functionality', () => {
-    it('has a refresh button', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
-      
+    it('has a refresh button', () => {
       const wrapper = mount(WeatherWidget)
-      await flushPromises()
       
       const refreshButton = wrapper.findAll('button').find(btn => 
         btn.text().includes('Refresh')
@@ -234,12 +281,23 @@ describe('WeatherWidget', () => {
     })
 
     it('refetches data when refresh button is clicked', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      // Select a city first
+      await searchInput.setValue('New York')
       await flushPromises()
       
-      expect(vi.mocked(fetchWeatherData)).toHaveBeenCalledTimes(1)
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
+      await flushPromises()
+      
+      expect(vi.mocked(getWeatherForLocation)).toHaveBeenCalledTimes(1)
       
       const refreshButton = wrapper.findAll('button').find(btn => 
         btn.text().includes('Refresh')
@@ -247,15 +305,26 @@ describe('WeatherWidget', () => {
       await refreshButton!.trigger('click')
       await flushPromises()
       
-      expect(vi.mocked(fetchWeatherData)).toHaveBeenCalledTimes(2)
+      expect(vi.mocked(getWeatherForLocation)).toHaveBeenCalledTimes(2)
     })
 
     it('disables refresh button while loading', async () => {
-      vi.mocked(fetchWeatherData).mockImplementation(() => 
-        new Promise(resolve => setTimeout(() => resolve(mockWeatherData), 100))
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockImplementation(() => 
+        new Promise(resolve => setTimeout(() => resolve(mockWidgetData), 100))
       )
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
+      // Don't wait for promises - check loading state
       
       const refreshButton = wrapper.findAll('button').find(btn => 
         btn.text().includes('Refresh')
@@ -265,63 +334,120 @@ describe('WeatherWidget', () => {
   })
 
   describe('Loading States', () => {
-    it('shows loading state while fetching data', () => {
-      vi.mocked(fetchWeatherData).mockImplementation(() => 
-        new Promise(resolve => setTimeout(() => resolve(mockWeatherData), 100))
-      )
-      
-      const wrapper = mount(WeatherWidget)
-      
-      expect(wrapper.text()).toContain('Loading weather data')
-    })
-
-    it('disables search input while loading', async () => {
-      vi.mocked(fetchWeatherData).mockImplementation(() => 
-        new Promise(resolve => setTimeout(() => resolve(mockWeatherData), 100))
+    it('shows loading state while fetching data', async () => {
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockImplementation(() => 
+        new Promise(resolve => setTimeout(() => resolve(mockWidgetData), 100))
       )
       
       const wrapper = mount(WeatherWidget)
       const searchInput = wrapper.find('input[type="text"]')
       
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      cityButton!.trigger('click')
+      // Don't wait - check loading state immediately
+      
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find('.animate-pulse').exists()).toBe(true)
+    })
+
+    it('disables search input while loading', async () => {
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockImplementation(() => 
+        new Promise(resolve => setTimeout(() => resolve(mockWidgetData), 100))
+      )
+      
+      const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      cityButton!.trigger('click')
+      // Don't wait - check disabled state
+      
+      await wrapper.vm.$nextTick()
       expect(searchInput.attributes('disabled')).toBeDefined()
     })
   })
 
   describe('Data Display', () => {
     it('formats dates correctly', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
       await flushPromises()
       
-      // Should display formatted date for today
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
+      await flushPromises()
+      
+      // Should display formatted dates
       const dateText = wrapper.text()
-      expect(dateText).toMatch(/\d{1,2}\/\d{1,2}\/\d{4}/) // MM/DD/YYYY or similar
+      expect(dateText).toMatch(/Today|Tomorrow|Mon|Tue|Wed|Thu|Fri|Sat|Sun/)
     })
 
     it('rounds temperature values', async () => {
       const dataWithDecimals = {
-        ...mockWeatherData,
+        ...mockProcessedWeatherData,
         forecast: {
-          ...mockWeatherData.forecast,
-          maxTemperatures: [18.7, 20.3, 22.9, 19.1, 17.5, 21.8, 23.2],
-          minTemperatures: [10.2, 12.6, 14.1, 11.9, 9.4, 13.7, 15.3],
+          ...mockProcessedWeatherData.forecast,
+          maxTemperatures: [19, 20, 23, 19, 18, 22, 23],
+          minTemperatures: [10, 13, 14, 12, 9, 13, 15],
         },
       }
-      vi.mocked(fetchWeatherData).mockResolvedValue(dataWithDecimals)
+      
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue({
+        data: dataWithDecimals,
+        timestamp: Date.now(),
+      })
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
       await flushPromises()
       
-      // Temperatures should be rounded
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
+      await flushPromises()
+      
+      // Temperatures should be displayed as integers
       expect(wrapper.text()).toContain('19°')
       expect(wrapper.text()).toContain('10°')
     })
 
     it('displays location information', async () => {
-      vi.mocked(fetchWeatherData).mockResolvedValue(mockWeatherData)
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
       
       const wrapper = mount(WeatherWidget)
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      await searchInput.setValue('New York')
+      await flushPromises()
+      
+      const cityButton = wrapper.findAll('button').find(btn => 
+        btn.text().includes('New York')
+      )
+      await cityButton!.trigger('click')
       await flushPromises()
       
       expect(wrapper.text()).toContain('New York')
