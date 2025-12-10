@@ -44,7 +44,7 @@ export const chartColorsAlpha = {
 export const defaultFontConfig = {
   family: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
   size: 12,
-  weight: '400',
+  weight: 400 as const,
 }
 
 /**
@@ -76,7 +76,7 @@ export const defaultChartOptions: ChartOptions = {
       displayColors: true,
       titleFont: {
         ...defaultFontConfig,
-        weight: '600',
+        weight: 600 as const,
       },
       bodyFont: {
         ...defaultFontConfig,
@@ -87,7 +87,6 @@ export const defaultChartOptions: ChartOptions = {
     x: {
       grid: {
         display: false,
-        drawBorder: false,
       },
       ticks: {
         font: {
@@ -99,7 +98,6 @@ export const defaultChartOptions: ChartOptions = {
     y: {
       grid: {
         color: chartColors.light,
-        drawBorder: false,
       },
       ticks: {
         font: {
