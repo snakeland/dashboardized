@@ -13,7 +13,7 @@ import { getWeatherForLocation, searchCities } from '../weatherService'
 vi.mock('../weatherService', () => ({
   getWeatherForLocation: vi.fn(),
   searchCities: vi.fn(),
-  debounce: (fn: Function) => fn, // Disable debounce for tests
+  debounce: (fn: (...args: any[]) => any) => fn, // Disable debounce for tests
 }))
 
 // Mock Chart.js component

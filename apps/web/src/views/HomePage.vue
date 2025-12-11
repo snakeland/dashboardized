@@ -24,10 +24,23 @@ import { WeatherWidget } from '@dashboardized/widgets'
         <!-- Placeholder for more widgets -->
         <div class="col-span-1 bg-white rounded-lg shadow-md p-8 flex items-center justify-center border-2 border-dashed border-gray-300">
           <div class="text-center text-gray-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 mx-auto mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4v16m8-8H4"
+              />
             </svg>
-            <p class="text-lg">More widgets coming soon...</p>
+            <p class="text-lg">
+              More widgets coming soon...
+            </p>
           </div>
         </div>
       </div>

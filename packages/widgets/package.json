@@ -8,7 +8,8 @@
   "scripts": {
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint . --ext .vue,.ts --fix"
+    "lint": "eslint . --ext .vue,.ts",
+    "lint:fix": "eslint . --ext .vue,.ts --fix"
   },
   "peerDependencies": {
     "vue": "^3.4.0"
@@ -18,6 +19,7 @@
     "@dashboardized/ui": "workspace:*"
   },
   "devDependencies": {
+    "@dashboardized/eslint-config": "workspace:^",
     "@types/node": "^20.10.6",
     "@vitejs/plugin-vue": "^5.0.0",
     "@vitest/coverage-v8": "^1.1.0",

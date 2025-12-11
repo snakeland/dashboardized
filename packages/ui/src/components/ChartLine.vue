@@ -146,7 +146,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="chart-container" :style="{ height: `${height}px` }">
+  <div
+    class="chart-container"
+    :style="{ height: `${height}px` }"
+  >
     <Line
       ref="chartRef"
       :chart-id="chartId"

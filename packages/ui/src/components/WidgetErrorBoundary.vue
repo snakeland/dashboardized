@@ -94,7 +94,10 @@ defineExpose({
           </h3>
           <div class="mt-2 text-sm text-red-700">
             <p>{{ fallback }}</p>
-            <p v-if="errorMessage" class="mt-1 font-mono text-xs">
+            <p
+              v-if="errorMessage"
+              class="mt-1 font-mono text-xs"
+            >
               {{ errorMessage }}
             </p>
           </div>

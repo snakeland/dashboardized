@@ -8,12 +8,14 @@
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "test:coverage": "vitest run --coverage --passWithNoTests",
-    "lint": "eslint . --ext .vue,.ts --fix"
+    "lint": "eslint . --ext .vue,.ts",
+    "lint:fix": "eslint . --ext .vue,.ts --fix"
   },
   "peerDependencies": {
     "vue": "^3.4.0"
   },
   "devDependencies": {
+    "@dashboardized/eslint-config": "workspace:^",
     "@vitejs/plugin-vue": "^5.0.0",
     "@vitest/coverage-v8": "^1.1.0",
     "@vue/test-utils": "^2.4.3",

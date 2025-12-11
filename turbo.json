@@ -20,6 +20,9 @@
     },
     "lint": {
       "dependsOn": ["^build"]
+    },
+    "lint:fix": {
+      "dependsOn": ["^build"]
     }
   }
 }
