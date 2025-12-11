@@ -218,6 +218,58 @@ describe('WeatherWidget', () => {
       
       expect((searchInput.element as HTMLInputElement).value).toBe('New York')
     })
+
+    it('closes dropdown when clicking outside search container', async () => {
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      vi.mocked(getWeatherForLocation).mockResolvedValue(mockWidgetData)
+      
+      const wrapper = mount(WeatherWidget, {
+        attachTo: document.body, // Attach to document for click outside to work
+      })
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      // Open dropdown by searching
+      await searchInput.setValue('New')
+      await flushPromises()
+      
+      // Verify dropdown is visible
+      expect(wrapper.find('.absolute.z-10').exists()).toBe(true)
+      
+      // Click outside the search container (on the weather widget title)
+      const widgetTitle = wrapper.find('h2')
+      await widgetTitle.trigger('click')
+      await wrapper.vm.$nextTick()
+      
+      // Dropdown should be closed
+      expect(wrapper.find('.absolute.z-10').exists()).toBe(false)
+      
+      wrapper.unmount()
+    })
+
+    it('keeps dropdown open when clicking inside search container', async () => {
+      vi.mocked(searchCities).mockResolvedValue(mockCityResults)
+      
+      const wrapper = mount(WeatherWidget, {
+        attachTo: document.body,
+      })
+      const searchInput = wrapper.find('input[type="text"]')
+      
+      // Open dropdown by searching
+      await searchInput.setValue('New')
+      await flushPromises()
+      
+      // Verify dropdown is visible
+      expect(wrapper.find('.absolute.z-10').exists()).toBe(true)
+      
+      // Click on the search input itself
+      await searchInput.trigger('click')
+      await wrapper.vm.$nextTick()
+      
+      // Dropdown should still be open
+      expect(wrapper.find('.absolute.z-10').exists()).toBe(true)
+      
+      wrapper.unmount()
+    })
   })
 
   describe('Error Handling', () => {
