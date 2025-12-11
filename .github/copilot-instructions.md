@@ -51,6 +51,18 @@ Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub A
 - **Never commit directly to `main`** - it's a protected branch
 - Base new branches on latest `main`: `git checkout main && git pull && git checkout -b <branch-name>`
 
+### Issue Management & Planning
+
+Before moving an issue to "Ready" or "In Development", ensure:
+
+1. **Issue must be refined** - Clear acceptance criteria and implementation details documented
+2. **Issue must have estimation** - Time/effort estimate added (hours or story points)
+3. **Issue must have proper tagging** - Appropriate labels applied (e.g., `enhancement`, `bug`, `documentation`, priority labels)
+
+**Refinement must happen before estimation**. An issue cannot be accurately estimated without clear acceptance criteria and technical approach.
+
+Only start work on issues that meet all three criteria above.
+
 ### Code Style & Commits
 
 - **Conventional Commits** required for all commits (e.g., `feat:`, `fix:`, `chore:`)
