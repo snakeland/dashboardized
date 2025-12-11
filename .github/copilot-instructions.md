@@ -1,36 +1,39 @@
 # Dashboardized — AI Coding Instructions
 
+> **Primary Reference**: See [`README.md`](../README.md) for project overview, installation, features, and contribution guidelines.
+
 ## Project Overview
 
 Dashboardized is a **modular, customizable dashboard platform** where users create personalized dashboards by selecting widgets (weather, news, crypto, GitHub activity, etc.). The platform includes OAuth authentication, user preference storage, and AI-generated daily/weekly summaries based on widget data.
 
 **Tech Stack**: Vue 3 (Vite + Composition API), Pinia, Vue Router, TailwindCSS, Node.js backend (Express/NestJS), Auth0/Firebase Auth, OpenTelemetry
 
+**Current Status**: MVP Phase - Weather Widget ✅ Complete (52 tests passing, full documentation)
+
+For detailed project structure, installation, and available widgets, see [`README.md`](../README.md).
+
 ## Architecture & Structure
 
-This is a **Turborepo monorepo** with the following layout:
+This is a **Turborepo monorepo**. See [`README.md`](../README.md#project-structure) for full directory layout.
 
-```
-my-dashboard/
- ├─ apps/
- │   ├─ web/               # Vue 3 + Vite + TailwindCSS frontend
- │   └─ api/               # Node.js backend (Express or NestJS)
- ├─ packages/
- │   ├─ widgets/           # Independent widget modules
- │   ├─ ui/                # Shared UI components (pure, no data deps)
- │   ├─ utils/             # Helpers, API wrappers
- │   └─ types/             # Shared TypeScript types
- ├─ .github/workflows/     # CI/CD: ci.yml, release.yml, deploy.yml
- ├─ turbo.json             # Turborepo pipeline configuration
-```
+**Key packages:**
+- `apps/web` - Vue 3 + Vite + TailwindCSS frontend
+- `apps/api` - Node.js backend (Express or NestJS)
+- `packages/widgets` - Independent widget modules (Weather ✅ implemented)
+- `packages/ui` - Shared UI components (ChartLine, WidgetErrorBoundary)
+- `packages/utils` - Helpers, API wrappers
+- `packages/types` - Shared TypeScript types (widget interfaces)
 
 ### Widget Architecture
 
 Each widget in `packages/widgets/` is **independent and self-contained**, exposing:
 - **UI component** (Vue 3 component)
-- **`fetchData()`** function for API calls
+- **Data fetching function** (e.g., `getWeatherForLocation()`, `fetchData()`)
 - **`aiSummary(data)`** function returning structured data for AI prompts
 - Configuration schema and props
+- Comprehensive test suite (service, AI, component layers)
+
+**Reference implementation**: `packages/widgets/src/weather/` (9 files, 52 tests, 100% passing)
 
 Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub API). The backend acts as a **secure proxy** when API keys are needed—never expose keys in frontend code.
 
@@ -45,10 +48,15 @@ Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub A
 ### Testing Strategy
 
 - **Vitest + Vue Test Utils** for unit tests
-- **80% coverage minimum** project-wide—configure coverage reports (Codecov/Coveralls)
-- Widget tests must cover: component rendering, `fetchData()` logic, error states
+- **Current status**: 52 tests passing (Weather widget comprehensive suite)
+- Widget tests must cover: component rendering, data fetching logic, AI summaries, error states
 - Integration tests for AI summary endpoints in `apps/api`
 - Run tests via `pnpm test` (leverages Turborepo caching)
+
+**Test pattern** (Weather widget example):
+1. Service layer tests (19 tests) - API calls, debouncing, error handling
+2. AI summary tests (14 tests) - Data formatting, trends, edge cases
+3. Component tests (19 tests) - User interactions, state management, loading/error states
 
 ### State Management & Routing
 
@@ -60,12 +68,30 @@ Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub A
 
 ### Adding a New Widget
 
+**Reference the Weather widget implementation** (`packages/widgets/src/weather/`) as a complete example.
+
 1. Create module in `packages/widgets/<widget-name>/`
-2. Implement component, `fetchData()`, `aiSummary()` functions
-3. Add tests (Vitest) meeting 80% coverage threshold
-4. Register widget in widget loader (dynamic import)
-5. Document API dependencies and required env vars
+2. Implement component, data fetching, `aiSummary()` functions
+3. Add comprehensive tests (Vitest) covering all layers
+4. Register widget in widget loader (`packages/widgets/src/index.ts`)
+5. Document API dependencies and required env vars (create README.md)
 6. Add package to Turborepo pipeline in `turbo.json` if needed
+
+**File structure** (Weather widget example):
+```
+weather/
+├── index.ts               # Public exports
+├── WeatherWidget.vue      # Main component (375 lines)
+├── weatherService.ts      # API calls (188 lines)
+├── weatherTypes.ts        # TypeScript types (166 lines)
+├── weatherAI.ts           # AI summary (62 lines)
+├── weatherConfig.ts       # Widget metadata (18 lines)
+├── README.md              # Documentation (127 lines)
+└── __tests__/
+    ├── WeatherWidget.test.ts      # Component tests (19 tests)
+    ├── weatherService.test.ts     # Service tests (19 tests)
+    └── weatherAI.test.ts          # AI tests (14 tests)
+```
 
 ### Authentication Flow
 
@@ -111,15 +137,21 @@ Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub A
 - Responsive design—mobile-first breakpoints
 - Chart.js for widget visualizations (e.g., temperature trends)
 
-## Project Roadmap (from Plan.md)
+## Project Roadmap
 
-**MVP Phase**: Customizable dashboard with Weather, News, Crypto widgets, Auth0 login, basic AI summaries
+See [`plan-dashboardized.prompt.md`](../plan-dashboardized.prompt.md) for detailed roadmap and sprint planning.
 
-**Future**: GitHub Activity widget, Google Calendar integration, Google Analytics metrics, Azure deployment, end-to-end tests (Cypress)
+**Current milestone**: MVP Phase - Day 3-5 ✅ Weather Widget Complete
+
+**Next priorities**:
+1. Authentication (OAuth) - [Issue #2](https://github.com/snakeland/dashboardized/issues/2)
+2. CI/CD and coverage - [Issue #6](https://github.com/snakeland/dashboardized/issues/6)
+3. ESLint configuration - [Issue #12](https://github.com/snakeland/dashboardized/issues/12)
+4. Additional widgets (News, Crypto) - [Issues #4, #5](https://github.com/snakeland/dashboardized/issues)
 
 ## Environment Setup
 
-Refer to `README.md` for:
+Refer to [`README.md`](../README.md#getting-started) for:
 - Installation instructions (`pnpm install`)
 - Environment variables (`.env.example`)
 - Running tests and CI locally
@@ -127,4 +159,4 @@ Refer to `README.md` for:
 
 ---
 
-*Last updated: December 2025 | Based on Plan.md specifications*
+*Last updated: December 2025 | Weather Widget implementation complete with 52 passing tests*

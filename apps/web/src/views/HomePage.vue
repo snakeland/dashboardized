@@ -1,5 +1,5 @@
 <script setup lang="ts">
-//
+import { WeatherWidget } from '@dashboardized/widgets'
 </script>
 
 <template>
@@ -13,20 +13,22 @@
       </p>
     </header>
 
-    <div class="max-w-4xl mx-auto">
-      <div class="bg-white rounded-lg shadow-md p-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">
-          Welcome! 🎉
-        </h2>
-        <p class="text-gray-600 mb-4">
-          Dashboardized is a modular, customizable dashboard platform.
-          Select widgets to create your personalized dashboard.
-        </p>
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
-          <p class="text-sm text-blue-700">
-            <strong>Status:</strong> Project skeleton initialized. 
-            Ready for widget development!
-          </p>
+    <div class="max-w-7xl mx-auto">
+      <!-- Widgets Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Weather Widget - Half Width -->
+        <div class="col-span-1">
+          <WeatherWidget />
+        </div>
+
+        <!-- Placeholder for more widgets -->
+        <div class="col-span-1 bg-white rounded-lg shadow-md p-8 flex items-center justify-center border-2 border-dashed border-gray-300">
+          <div class="text-center text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <p class="text-lg">More widgets coming soon...</p>
+          </div>
         </div>
       </div>
     </div>

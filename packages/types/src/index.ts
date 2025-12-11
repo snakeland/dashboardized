@@ -1,19 +1,17 @@
 // Shared TypeScript types and interfaces
 
-export interface Widget {
-  id: string
-  name: string
-  type: string
-}
+// Widget type system - Core interfaces for all widgets
+export type {
+  WidgetConfig,
+  WidgetData,
+  AISummaryData,
+  Widget,
+  WidgetRegistry,
+} from './widget'
 
-export interface WidgetData {
-  widgetId: string
-  data: unknown
-  timestamp: Date
-}
-
+// Dashboard configuration
 export interface DashboardConfig {
   userId: string
-  widgets: Widget[]
+  widgets: string[] // Widget IDs
   layout: unknown
 }

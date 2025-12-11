@@ -8,6 +8,9 @@
   "scripts": {
     "lint": "eslint . --ext .ts --fix"
   },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
   "devDependencies": {
     "typescript": "^5.3.3"
   }

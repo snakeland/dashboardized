@@ -92,43 +92,69 @@ pnpm build
 
 ## Features
 
-### Current Status
-- ✅ Turborepo monorepo setup with pnpm workspaces
-- ✅ Vue 3 frontend with Vite, Pinia, Vue Router, TailwindCSS
-- ✅ Express backend with TypeScript
-- ✅ Vitest testing framework with 80% coverage threshold
-- ✅ Changesets for semantic versioning
-- ✅ Project structure and documentation
-- 🚧 Customizable dashboard layout
-- 🚧 Weather widget (Open-Meteo API)
-- 🚧 News widget (NewsAPI/mediastack)
-- 🚧 Cryptocurrency widget (Coingecko API)
-- 🚧 OAuth authentication (Auth0/Firebase)
-- 🚧 AI-generated summaries (OpenAI/Azure OpenAI)
+### Implemented ✅
+- ✅ **Turborepo monorepo** setup with pnpm workspaces
+- ✅ **Vue 3 frontend** with Vite, Pinia, Vue Router, TailwindCSS
+- ✅ **Express backend** with TypeScript
+- ✅ **Testing infrastructure**: Vitest + Vue Test Utils (52 tests passing)
+- ✅ **Changesets** for semantic versioning
+- ✅ **Weather Widget**: City search, current weather, 7-day forecast with Chart.js
+- ✅ **Reusable UI components**: ChartLine, WidgetErrorBoundary
+- ✅ **Widget type system**: Core interfaces and contracts
+- ✅ **AI summary generation** framework (ready for integration)
 
-### Planned
-- GitHub Activity widget
-- Google Calendar integration
-- Google Analytics metrics widget
-- End-to-end testing (Cypress)
-- Azure deployment
+### In Progress 🚧
+- 🚧 **OAuth authentication** (Auth0/Firebase) - [Issue #2](https://github.com/snakeland/dashboardized/issues/2)
+- 🚧 **CI/CD Pipeline** and coverage reporting - [Issue #6](https://github.com/snakeland/dashboardized/issues/6)
+- 🚧 **ESLint configuration** - [Issue #12](https://github.com/snakeland/dashboardized/issues/12)
+
+### Planned 🔜
+- 🔜 **News widget** (NewsAPI/mediastack) - [Issue #4](https://github.com/snakeland/dashboardized/issues/4)
+- 🔜 **Cryptocurrency widget** (Coingecko) - [Issue #5](https://github.com/snakeland/dashboardized/issues/5)
+- 🔜 **GitHub Activity widget** - [Issue #7](https://github.com/snakeland/dashboardized/issues/7)
+- 🔜 **AI-powered summaries** (OpenAI/Azure OpenAI) - [Issue #3](https://github.com/snakeland/dashboardized/issues/3)
+- 🔜 **Google Calendar** integration
+- 🔜 **Google Analytics** metrics widget
+- 🔜 **Azure deployment** - [Issue #11](https://github.com/snakeland/dashboardized/issues/11)
+- 🔜 **End-to-end testing** (Cypress)
 
 ## Widget Development
 
+### Available Widgets
+
+#### Weather Widget ✅
+**Status**: Implemented | **API**: Open-Meteo (free, no auth required)
+
+Features:
+- City search with autocomplete
+- Current weather display (temperature, condition, icon)
+- 7-day forecast with interactive Chart.js visualization
+- Auto-refresh every 30 minutes
+- Manual refresh button
+- Comprehensive error handling
+
+See [`packages/widgets/src/weather/README.md`](packages/widgets/src/weather/README.md) for detailed documentation.
+
+### Creating a New Widget
+
 Each widget in `packages/widgets/` is self-contained and exposes:
 - **UI component** (Vue 3)
-- **`fetchData()`** function for API calls
+- **`fetchData()`** or **`getWeatherForLocation()`** function for API calls
 - **`aiSummary(data)`** function for AI prompt data
 - Configuration schema and props
+- Comprehensive test suite (unit + integration)
 
-Widget development workflow:
+**Widget development workflow:**
 1. Create module in `packages/widgets/<widget-name>/`
-2. Implement component, `fetchData()`, `aiSummary()` functions
-3. Add tests (Vitest) meeting 80% coverage threshold
-4. Register widget in widget loader (dynamic import)
+2. Implement component, data fetching, and AI summary functions
+3. Add tests (Vitest) with comprehensive coverage
+4. Register widget in widget loader (`packages/widgets/src/index.ts`)
 5. Document API dependencies and required env vars
+6. Add package to Turborepo pipeline in `turbo.json` if needed
 
-See [AI Coding Instructions](.github/copilot-instructions.md) for detailed guidelines.
+**Reference implementation:** `packages/widgets/src/weather/` (375 lines component, 52 passing tests)
+
+See [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for detailed coding guidelines.
 
 ## Contributing
 
@@ -151,9 +177,13 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Testing Requirements
 
-- Minimum 80% code coverage project-wide
-- All widgets must have unit tests
-- Integration tests for AI endpoints
+- **52 tests currently passing** (Weather widget comprehensive suite)
+- All widgets must have unit tests covering:
+  - Service layer (API calls, data processing)
+  - AI summary generation
+  - Component integration (rendering, user interactions, error states)
+- Integration tests for AI endpoints in backend
+- Target comprehensive coverage for critical paths
 
 ## Versioning
 
@@ -176,8 +206,17 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Roadmap
 
-See [Plan.md](Plan.md) for detailed project roadmap and sprint planning.
+See [plan-dashboardized.prompt.md](plan-dashboardized.prompt.md) for detailed project roadmap and sprint planning.
+
+**Current milestone**: MVP Phase - Day 3-5 (Weather Widget) ✅ Complete
+
+**Next steps**:
+- Authentication and user preferences (Day 6-7)
+- AI integration and additional widgets (Day 8-10)
+- CI/CD and coverage reporting (Day 11-14)
+
+Track all issues and progress on [GitHub Issues](https://github.com/snakeland/dashboardized/issues).
 
 ---
 
-**Status**: 🚧 In Development | **Version**: 0.0.0 | **Last Updated**: December 2025
+**Status**: 🚧 In Active Development | **Version**: 0.0.0 | **Last Updated**: December 2025
