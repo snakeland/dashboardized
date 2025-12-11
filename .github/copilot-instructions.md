@@ -64,6 +64,13 @@ Dashboardized is a modular, multi-package Turborepo that provides customizable u
 - DO always create a feature/doc/chore/fix branch for every change. `main` branch is protected.
 - DO always check that a feature/fix/chore/docs branch has been created before committing changes.
 
+### 6.1 Do / Don't for Planning (explicit preferences)
+
+- DO ask for a plan before starting large features or architectural changes.
+- DO include checkboxes for completed vs pending tasks in plans.
+- DON'T start coding large features without a clear plan and checklist.
+- DO check before starting with a new issue, that issue on github has been refined and contains estimation and correct label's/tagging.
+
 ---
 
 ## 7. Quick snippets & shortcuts
