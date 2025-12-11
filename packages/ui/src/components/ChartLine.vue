@@ -30,6 +30,8 @@ ChartJS.register(
 )
 
 export interface ChartLineProps {
+  /** Unique ID for the chart canvas element (required to prevent Chart.js canvas reuse issues) */
+  chartId: string
   /** X-axis labels */
   labels: string[]
   /** Primary dataset values */
@@ -147,6 +149,7 @@ onMounted(() => {
   <div class="chart-container" :style="{ height: `${height}px` }">
     <Line
       ref="chartRef"
+      :chart-id="chartId"
       :data="chartData"
       :options="chartOptions"
     />
