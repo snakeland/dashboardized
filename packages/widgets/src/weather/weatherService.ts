@@ -54,7 +54,9 @@ export async function searchCities(
     const data: GeocodingResponse = await response.json()
     return data.results || []
   } catch (error) {
-    console.error('Error searching cities:', error)
+    if (import.meta.env.DEV) {
+      console.error('Error searching cities:', error)
+    }
     throw new Error('Failed to search for cities. Please try again.')
   }
 }
@@ -114,7 +116,9 @@ export async function fetchWeatherData(
     const data: WeatherResponse = await response.json()
     return data
   } catch (error) {
-    console.error('Error fetching weather data:', error)
+    if (import.meta.env.DEV) {
+      console.error('Error fetching weather data:', error)
+    }
     throw new Error('Failed to fetch weather data. Please try again.')
   }
 }

@@ -253,7 +253,9 @@ const handleSearchInput = async () => {
     const results = await searchCities(query);
     searchResults.value = results;
   } catch (err) {
-    console.error('City search error:', err);
+    if (import.meta.env.DEV) {
+      console.error('City search error:', err);
+    }
     searchResults.value = [];
   } finally {
     isSearching.value = false;
@@ -287,7 +289,9 @@ const fetchWeather = async () => {
     }
   } catch (err) {
     error.value = err instanceof Error ? err.message : 'Failed to fetch weather data';
-    console.error('Weather fetch error:', err);
+    if (import.meta.env.DEV) {
+      console.error('Weather fetch error:', err);
+    }
     weatherData.value = null;
   } finally {
     isLoading.value = false;
