@@ -9,13 +9,18 @@
     "test": "turbo run test",
     "test:coverage": "turbo run test:coverage",
     "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "prepare": "husky install",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
+    "eslint": "^8.57.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
     "turbo": "^1.11.2",
     "typescript": "^5.3.3"
@@ -24,5 +29,13 @@
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,vue}": [
+      "eslint --fix"
+    ],
+    "*.{js,jsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
   }
 }

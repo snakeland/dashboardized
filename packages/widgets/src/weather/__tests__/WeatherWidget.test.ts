@@ -13,7 +13,8 @@ import { getWeatherForLocation, searchCities } from '../weatherService'
 vi.mock('../weatherService', () => ({
   getWeatherForLocation: vi.fn(),
   searchCities: vi.fn(),
-  debounce: (fn: Function) => fn, // Disable debounce for tests
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  debounce: (fn: (...args: any[]) => any) => fn, // Disable debounce for tests
 }))
 
 // Mock Chart.js component
@@ -74,6 +75,15 @@ const mockCityResults = [
   },
 ]
 
+// Helper function to find and assert city button exists
+function findCityButton(wrapper: ReturnType<typeof mount>, cityName: string) {
+  const button = wrapper.findAll('button').find(btn => btn.text().includes(cityName))
+  if (!button) {
+    throw new Error(`City button for "${cityName}" not found`)
+  }
+  return button
+}
+
 describe('WeatherWidget', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -125,10 +135,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect(wrapper.find('.mock-chart').exists()).toBe(true)
@@ -145,10 +153,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect(wrapper.text()).toContain('18°') // Forecast max temp
@@ -189,12 +195,10 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
+      const cityButton = findCityButton(wrapper, 'New York')
       expect(cityButton).toBeDefined()
       
-      await cityButton!.trigger('click')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect(vi.mocked(getWeatherForLocation)).toHaveBeenCalledWith(mockCityResults[0])
@@ -210,10 +214,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect((searchInput.element as HTMLInputElement).value).toBe('New York')
@@ -276,6 +278,7 @@ describe('WeatherWidget', () => {
     it('displays error message when fetch fails', async () => {
       vi.mocked(searchCities).mockResolvedValue(mockCityResults)
       vi.mocked(getWeatherForLocation).mockResolvedValue({
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: {} as any,
         timestamp: Date.now(),
         error: 'Failed to load weather data',
@@ -287,10 +290,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect(wrapper.text()).toContain('Failed to load weather data')
@@ -343,10 +344,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect(vi.mocked(getWeatherForLocation)).toHaveBeenCalledTimes(1)
@@ -354,7 +353,8 @@ describe('WeatherWidget', () => {
       const refreshButton = wrapper.findAll('button').find(btn => 
         btn.text().includes('Refresh')
       )
-      await refreshButton!.trigger('click')
+      if (!refreshButton) throw new Error('Refresh button not found')
+      await refreshButton.trigger('click')
       await flushPromises()
       
       expect(vi.mocked(getWeatherForLocation)).toHaveBeenCalledTimes(2)
@@ -372,16 +372,15 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       // Don't wait for promises - check loading state
       
       const refreshButton = wrapper.findAll('button').find(btn => 
         btn.text().includes('Refresh')
       )
-      expect(refreshButton!.attributes('disabled')).toBeDefined()
+      if (!refreshButton) throw new Error('Refresh button not found')
+      expect(refreshButton.attributes('disabled')).toBeDefined()
     })
   })
 
@@ -398,10 +397,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      cityButton.trigger('click')
       // Don't wait - check loading state immediately
       
       await wrapper.vm.$nextTick()
@@ -420,10 +417,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      cityButton.trigger('click')
       // Don't wait - check disabled state
       
       await wrapper.vm.$nextTick()
@@ -442,10 +437,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       // Should display formatted dates
@@ -475,10 +468,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       // Temperatures should be displayed as integers
@@ -496,10 +487,8 @@ describe('WeatherWidget', () => {
       await searchInput.setValue('New York')
       await flushPromises()
       
-      const cityButton = wrapper.findAll('button').find(btn => 
-        btn.text().includes('New York')
-      )
-      await cityButton!.trigger('click')
+      const cityButton = findCityButton(wrapper, 'New York')
+      await cityButton.trigger('click')
       await flushPromises()
       
       expect(wrapper.text()).toContain('New York')

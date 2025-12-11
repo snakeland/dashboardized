@@ -8,11 +8,13 @@
   "scripts": {
     "test": "vitest run --passWithNoTests",
     "test:coverage": "vitest run --coverage --passWithNoTests",
-    "lint": "eslint . --ext .ts --fix"
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
   },
   "devDependencies": {
+    "@dashboardized/eslint-config": "workspace:^",
+    "@vitest/coverage-v8": "^1.1.0",
     "typescript": "^5.3.3",
-    "vitest": "^1.1.0",
-    "@vitest/coverage-v8": "^1.1.0"
+    "vitest": "^1.1.0"
   }
 }

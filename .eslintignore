@@ -1,0 +1,8 @@
+dist
+node_modules
+coverage
+build
+.turbo
+*.log
+.DS_Store
+pnpm-lock.yaml

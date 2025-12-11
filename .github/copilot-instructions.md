@@ -17,6 +17,7 @@ For detailed project structure, installation, and available widgets, see [`READM
 This is a **Turborepo monorepo**. See [`README.md`](../README.md#project-structure) for full directory layout.
 
 **Key packages:**
+
 - `apps/web` - Vue 3 + Vite + TailwindCSS frontend
 - `apps/api` - Node.js backend (Express or NestJS)
 - `packages/widgets` - Independent widget modules (Weather ✅ implemented)
@@ -27,6 +28,7 @@ This is a **Turborepo monorepo**. See [`README.md`](../README.md#project-structu
 ### Widget Architecture
 
 Each widget in `packages/widgets/` is **independent and self-contained**, exposing:
+
 - **UI component** (Vue 3 component)
 - **Data fetching function** (e.g., `getWeatherForLocation()`, `fetchData()`)
 - **`aiSummary(data)`** function returning structured data for AI prompts
@@ -38,6 +40,16 @@ Each widget in `packages/widgets/` is **independent and self-contained**, exposi
 Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub API). The backend acts as a **secure proxy** when API keys are needed—never expose keys in frontend code.
 
 ## Development Conventions
+
+### Git Workflow & Branching
+
+- **Always create a new branch** before starting work on any feature, fix, or chore
+- Branch naming convention:
+  - `feat/<feature-name>` - New features (e.g., `feat/weather-widget`, `feat/news-widget`)
+  - `fix/<issue-description>` - Bug fixes (e.g., `fix/chart-rendering`)
+  - `chore/<task-name>` - Maintenance tasks (e.g., `chore/configure-eslint`)
+- **Never commit directly to `main`** - it's a protected branch
+- Base new branches on latest `main`: `git checkout main && git pull && git checkout -b <branch-name>`
 
 ### Code Style & Commits
 
@@ -54,6 +66,7 @@ Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub A
 - Run tests via `pnpm test` (leverages Turborepo caching)
 
 **Test pattern** (Weather widget example):
+
 1. Service layer tests (19 tests) - API calls, debouncing, error handling
 2. AI summary tests (14 tests) - Data formatting, trends, edge cases
 3. Component tests (19 tests) - User interactions, state management, loading/error states
@@ -78,6 +91,7 @@ Widgets consume public APIs (Open-Meteo, NewsAPI/mediastack, Coingecko, GitHub A
 6. Add package to Turborepo pipeline in `turbo.json` if needed
 
 **File structure** (Weather widget example):
+
 ```
 weather/
 ├── index.ts               # Public exports
@@ -144,6 +158,7 @@ See [`plan-dashboardized.prompt.md`](../plan-dashboardized.prompt.md) for detail
 **Current milestone**: MVP Phase - Day 3-5 ✅ Weather Widget Complete
 
 **Next priorities**:
+
 1. Authentication (OAuth) - [Issue #2](https://github.com/snakeland/dashboardized/issues/2)
 2. CI/CD and coverage - [Issue #6](https://github.com/snakeland/dashboardized/issues/6)
 3. ESLint configuration - [Issue #12](https://github.com/snakeland/dashboardized/issues/12)
@@ -152,6 +167,7 @@ See [`plan-dashboardized.prompt.md`](../plan-dashboardized.prompt.md) for detail
 ## Environment Setup
 
 Refer to [`README.md`](../README.md#getting-started) for:
+
 - Installation instructions (`pnpm install`)
 - Environment variables (`.env.example`)
 - Running tests and CI locally
@@ -159,4 +175,4 @@ Refer to [`README.md`](../README.md#getting-started) for:
 
 ---
 
-*Last updated: December 2025 | Weather Widget implementation complete with 52 passing tests*
+_Last updated: December 2025 | Weather Widget implementation complete with 52 passing tests_
