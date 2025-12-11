@@ -20,7 +20,7 @@
       </div>
 
       <!-- City Search Autocomplete -->
-      <div class="mb-6 relative">
+      <div ref="searchContainer" class="mb-6 relative">
         <label for="city-search" class="block text-sm font-semibold text-gray-700 mb-2">
           🔍 Search City
         </label>
@@ -176,6 +176,7 @@ const isLoading = ref(false);
 const error = ref<string | null>(null);
 const lastUpdated = ref<Date | null>(null);
 const refreshTimer = ref<number | null>(null);
+const searchContainer = ref<HTMLElement | null>(null);
 
 // Computed Properties
 const lastUpdatedText = computed(() => {
@@ -353,7 +354,8 @@ watch(() => props.refreshInterval, () => {
 // Handle clicks outside dropdown
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
-  if (!target.closest('.weather-widget')) {
+  // Close dropdown if click is outside the search container
+  if (searchContainer.value && !searchContainer.value.contains(target)) {
     showDropdown.value = false;
   }
 };
