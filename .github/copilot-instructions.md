@@ -94,7 +94,7 @@ export * from './weatherService'
 
 **Changelog:**
 
-- 2025-12-12 — Updated backend from "Express/NestJS" to "Express" to reflect actual implementation.
+- 2025-12-12 — Dashboardized team — Updated backend from "Express/NestJS" to "Express" to reflect actual implementation.
 
 ---
 
