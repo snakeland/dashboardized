@@ -16,7 +16,7 @@
 
 ## 2. Project summary (single paragraph)
 
-Dashboardized is a modular, multi-package Turborepo that provides customizable user dashboards made from independently versioned widgets (weather, news, crypto, GitHub activity). Tech stack: **Vue 3 (Vite + Composition API), Pinia, TailwindCSS, Node.js (Express/NestJS), TypeScript**. The backend proxies API keys and generates AI summaries from widget data.
+Dashboardized is a modular, multi-package Turborepo that provides customizable user dashboards made from independently versioned widgets (weather, news, crypto, GitHub activity). Tech stack: **Vue 3 (Vite + Composition API), Pinia, TailwindCSS, Node.js (Express), TypeScript**. The backend proxies API keys and generates AI summaries from widget data.
 
 ---
 
@@ -92,4 +92,10 @@ export * from './weatherService'
 
 ---
 
-_Last updated: 2025-12-11 — Dashboardized team_
+**Changelog:**
+
+- 2025-12-12 — Dashboardized team — Updated backend from "Express/NestJS" to "Express" to reflect actual implementation.
+
+---
+
+_Last updated: 2025-12-12 — Dashboardized team_
