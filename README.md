@@ -2,8 +2,8 @@
 
 A modular, customizable dashboard platform where users create personalized dashboards by selecting widgets for weather, news, crypto, GitHub activity, and more. Features OAuth authentication, user preference storage, and AI-generated daily/weekly summaries.
 
-[![CI](https://github.com/yourusername/dashboardized/workflows/CI/badge.svg)](https://github.com/yourusername/dashboardized/actions)
-[![Coverage](https://img.shields.io/badge/coverage-0%25-red)](https://github.com/yourusername/dashboardized)
+[![CI](https://github.com/snakeland/dashboardized/workflows/CI/badge.svg)](https://github.com/snakeland/dashboardized/actions)
+[![Coverage](https://img.shields.io/badge/coverage-0%25-red)](https://github.com/snakeland/dashboardized)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Tech Stack
@@ -38,10 +38,16 @@ Dashboardized/
  │   ├─ widgets/           # Independent widget modules
  │   ├─ ui/                # Shared UI components
  │   ├─ utils/             # Helpers, API wrappers
- │   └─ types/             # Shared TypeScript types
+ │   ├─ types/             # Shared TypeScript types
+ │   └─ eslint-config/     # Shared ESLint configuration
+ ├─ docs/                  # Project documentation
  ├─ .github/
  │   └─ copilot-instructions.md  # AI coding guidelines
+ ├─ .husky/                # Git hooks (pre-commit linting)
  ├─ .changeset/            # Changesets for versioning
+ ├─ .eslintignore          # ESLint ignore patterns
+ ├─ .prettierrc            # Prettier configuration
+ ├─ .prettierignore        # Prettier ignore patterns
  ├─ turbo.json             # Turborepo pipeline configuration
  └─ pnpm-workspace.yaml    # pnpm workspace configuration
 ```
@@ -93,22 +99,25 @@ pnpm build
 ## Features
 
 ### Implemented ✅
+
 - ✅ **Turborepo monorepo** setup with pnpm workspaces
 - ✅ **Vue 3 frontend** with Vite, Pinia, Vue Router, TailwindCSS
 - ✅ **Express backend** with TypeScript
-- ✅ **Testing infrastructure**: Vitest + Vue Test Utils (52 tests passing)
+- ✅ **Testing infrastructure**: Vitest + Vue Test Utils (54 tests passing)
 - ✅ **Changesets** for semantic versioning
 - ✅ **Weather Widget**: City search, current weather, 7-day forecast with Chart.js
 - ✅ **Reusable UI components**: ChartLine, WidgetErrorBoundary
 - ✅ **Widget type system**: Core interfaces and contracts
 - ✅ **AI summary generation** framework (ready for integration)
+- ✅ **ESLint configuration**: Shared config package with Husky pre-commit hooks
 
 ### In Progress 🚧
+
 - 🚧 **OAuth authentication** (Auth0/Firebase) - [Issue #2](https://github.com/snakeland/dashboardized/issues/2)
 - 🚧 **CI/CD Pipeline** and coverage reporting - [Issue #6](https://github.com/snakeland/dashboardized/issues/6)
-- 🚧 **ESLint configuration** - [Issue #12](https://github.com/snakeland/dashboardized/issues/12)
 
 ### Planned 🔜
+
 - 🔜 **News widget** (NewsAPI/mediastack) - [Issue #4](https://github.com/snakeland/dashboardized/issues/4)
 - 🔜 **Cryptocurrency widget** (Coingecko) - [Issue #5](https://github.com/snakeland/dashboardized/issues/5)
 - 🔜 **GitHub Activity widget** - [Issue #7](https://github.com/snakeland/dashboardized/issues/7)
@@ -123,9 +132,11 @@ pnpm build
 ### Available Widgets
 
 #### Weather Widget ✅
+
 **Status**: Implemented | **API**: Open-Meteo (free, no auth required)
 
 Features:
+
 - City search with autocomplete
 - Current weather display (temperature, condition, icon)
 - 7-day forecast with interactive Chart.js visualization
@@ -138,6 +149,7 @@ See [`packages/widgets/src/weather/README.md`](packages/widgets/src/weather/READ
 ### Creating a New Widget
 
 Each widget in `packages/widgets/` is self-contained and exposes:
+
 - **UI component** (Vue 3)
 - **`fetchData()`** or **`getWeatherForLocation()`** function for API calls
 - **`aiSummary(data)`** function for AI prompt data
@@ -145,6 +157,7 @@ Each widget in `packages/widgets/` is self-contained and exposes:
 - Comprehensive test suite (unit + integration)
 
 **Widget development workflow:**
+
 1. Create module in `packages/widgets/<widget-name>/`
 2. Implement component, data fetching, and AI summary functions
 3. Add tests (Vitest) with comprehensive coverage
@@ -168,6 +181,7 @@ See [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for det
 ### Commit Convention
 
 We use [Conventional Commits](https://www.conventionalcommits.org/):
+
 - `feat:` - New features
 - `fix:` - Bug fixes
 - `chore:` - Maintenance tasks
@@ -177,7 +191,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ### Testing Requirements
 
-- **52 tests currently passing** (Weather widget comprehensive suite)
+- **54 tests currently passing** (Weather widget comprehensive suite)
 - All widgets must have unit tests covering:
   - Service layer (API calls, data processing)
   - AI summary generation
@@ -211,6 +225,7 @@ See [plan-dashboardized.prompt.md](plan-dashboardized.prompt.md) for detailed pr
 **Current milestone**: MVP Phase - Day 3-5 (Weather Widget) ✅ Complete
 
 **Next steps**:
+
 - Authentication and user preferences (Day 6-7)
 - AI integration and additional widgets (Day 8-10)
 - CI/CD and coverage reporting (Day 11-14)
