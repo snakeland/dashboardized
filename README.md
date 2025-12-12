@@ -9,7 +9,7 @@ A modular, customizable dashboard platform where users create personalized dashb
 ## Tech Stack
 
 - **Frontend**: Vue 3 (Vite + Composition API), Pinia, Vue Router, TailwindCSS
-- **Backend**: Node.js (Express/NestJS)
+- **Backend**: Node.js (Express)
 - **Monorepo**: Turborepo with pnpm
 - **Testing**: Vitest + Vue Test Utils
 - **Auth**: Auth0/Firebase (OAuth with Google & GitHub)
