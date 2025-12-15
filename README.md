@@ -2,8 +2,8 @@
 
 A modular, customizable dashboard platform where users create personalized dashboards by selecting widgets for weather, news, crypto, GitHub activity, and more. Features OAuth authentication, user preference storage, and AI-generated daily/weekly summaries.
 
-[![CI](https://github.com/snakeland/dashboardized/workflows/CI/badge.svg)](https://github.com/snakeland/dashboardized/actions)
-[![Coverage](https://img.shields.io/badge/coverage-0%25-red)](https://github.com/snakeland/dashboardized)
+[![CI](https://github.com/snakeland/dashboardized/actions/workflows/ci.yml/badge.svg)](https://github.com/snakeland/dashboardized/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/snakeland/dashboardized/branch/main/graph/badge.svg)](https://codecov.io/gh/snakeland/dashboardized)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ## Tech Stack
