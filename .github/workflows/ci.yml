@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -57,8 +57,8 @@ jobs:
       - name: Upload coverage reports
         uses: codecov/codecov-action@v4
         with:
-          files: ./packages/widgets/coverage/coverage-final.json
-          flags: widgets
+          files: ./apps/*/coverage/coverage-final.json,./packages/*/coverage/coverage-final.json
+          flags: monorepo
           name: codecov-dashboardized
           fail_ci_if_error: false
         env:
