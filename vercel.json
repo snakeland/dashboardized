@@ -1,8 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm turbo run build --filter=@dashboardized/web",
+  "buildCommand": "pnpm install --frozen-lockfile && pnpm turbo run build --filter=@dashboardized/web",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "pnpm install",
-  "framework": null,
-  "devCommand": "pnpm --filter=@dashboardized/web dev"
+  "installCommand": null
 }
