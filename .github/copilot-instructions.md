@@ -64,7 +64,14 @@ Dashboardized is a modular, multi-package Turborepo that provides customizable u
 - DO always create a feature/doc/chore/fix branch for every change. `main` branch is protected.
 - DO always check that a feature/fix/chore/docs branch has been created before committing changes.
 
-### 6.1 Do / Don't for Planning (explicit preferences)
+### 6.1 Do / Don't for Changesets & Versioning (explicit preferences)
+
+- DO add a changeset (`pnpm changeset add`) for any feature, fix, or breaking change before committing.
+- DO commit the generated changeset file (`.changeset/*.md`) with your code changes.
+- DON'T add changesets for documentation, chores, tests, or internal refactoring.
+- DON'T manually edit version numbers in `package.json` — let the automated release workflow handle it.
+
+### 6.2 Do / Don't for Planning (explicit preferences)
 
 - DO ask for a plan before starting large features or architectural changes.
 - DO include checkboxes for completed vs pending tasks in plans.
@@ -95,6 +102,7 @@ export * from './weatherService'
 **Changelog:**
 
 - 2025-12-12 — Dashboardized team — Updated backend from "Express/NestJS" to "Express" to reflect actual implementation.
+- 2025-12-15 — Dashboardized team — Added changeset workflow guidelines for versioning.
 
 ---
 
