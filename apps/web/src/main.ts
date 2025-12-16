@@ -17,6 +17,7 @@ app.use(
     authorizationParams: {
       redirect_uri: import.meta.env.VITE_AUTH0_CALLBACK_URL || window.location.origin + '/callback',
       audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+      scope: 'openid profile email',
     },
   })
 )

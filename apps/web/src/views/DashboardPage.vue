@@ -48,7 +48,6 @@
         </p>
       </div>
 
-      <!-- Widgets Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Placeholder for widgets -->
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">

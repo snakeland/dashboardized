@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useAuthStore } from '../stores/auth'
-import { watch } from 'vue'
+
 
 /**
  * Composable that wraps Auth0 SDK and integrates with Pinia store
@@ -10,34 +10,7 @@ export function useAuth() {
   const auth0 = useAuth0()
   const authStore = useAuthStore()
 
-  // Sync Auth0 user with Pinia store
-  watch(
-    () => auth0.user.value,
-    async (auth0User) => {
-      if (auth0User && auth0.isAuthenticated.value) {
-        const accessToken = await auth0.getAccessTokenSilently()
-
-        // Transform Auth0 user to our User type
-        const user = {
-          id: auth0User.sub || '',
-          email: auth0User.email || '',
-          name: auth0User.name || '',
-          picture: auth0User.picture,
-          provider: 'auth0' as const,
-          createdAt: new Date(auth0User.updated_at || Date.now()),
-          updatedAt: new Date(auth0User.updated_at || Date.now()),
-        }
-
-        authStore.setUser(user)
-
-        // Fetch additional user info from our API
-        await authStore.fetchUser(accessToken)
-      } else {
-        authStore.clearAuth()
-      }
-    },
-    { immediate: true }
-  )
+  // Watcher removed - moved to App.vue to prevent multiple instances
 
   /**
    * Login with redirect to Auth0
