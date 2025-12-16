@@ -83,4 +83,39 @@ describe('useAuth Composable', () => {
         expect(store.error).toBe('Auth error')
         expect(store.isLoading).toBe(false)
     })
+
+    it('handles loginWithProvider error', async () => {
+        mockAuth0.loginWithRedirect.mockRejectedValue(new Error('Provider auth error'))
+        const { loginWithProvider } = useAuth()
+        const store = useAuthStore()
+
+        await loginWithProvider('github')
+
+        expect(store.error).toBe('Provider auth error')
+        expect(store.isLoading).toBe(false)
+    })
+
+    it('handles logout error', async () => {
+        mockAuth0.logout.mockRejectedValue(new Error('Logout error'))
+        const { logout } = useAuth()
+        // Spy on console.error
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { })
+
+        await logout()
+
+        expect(consoleSpy).toHaveBeenCalledWith('Logout error:', expect.any(Error))
+        consoleSpy.mockRestore()
+    })
+
+    it('handles getAccessToken error', async () => {
+        mockAuth0.getAccessTokenSilently.mockRejectedValue(new Error('Token error'))
+        const { getAccessToken } = useAuth()
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { })
+
+        const token = await getAccessToken()
+
+        expect(token).toBeUndefined()
+        expect(consoleSpy).toHaveBeenCalledWith('Failed to get access token:', expect.any(Error))
+        consoleSpy.mockRestore()
+    })
 })

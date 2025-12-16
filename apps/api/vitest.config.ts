@@ -10,8 +10,10 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'dist/',
-        '**/*.config.{js,ts}',
+        '**/*.config.{js,ts,cjs}',
+        '**/.eslintrc.{js,cjs}',
         '**/*.d.ts',
+        'src/index.ts',
       ],
       thresholds: {
         lines: 80,

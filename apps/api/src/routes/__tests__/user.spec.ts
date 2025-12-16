@@ -102,5 +102,19 @@ describe('User Routes', () => {
 
             expect(response.status).toBe(401)
         })
+
+        it('should use default values if body is empty', async () => {
+            const response = await request(app)
+                .put('/api/user/dashboard')
+                .send({})
+
+            expect(response.status).toBe(200)
+            expect(response.body.preferences).toMatchObject({
+                userId: 'auth0|123',
+                widgets: ['weather'], // Default
+                layout: null,         // Default
+                theme: 'auto',        // Default
+            })
+        })
     })
 })

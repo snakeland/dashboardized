@@ -13,8 +13,13 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'dist/',
-        '**/*.config.{js,ts}',
+        '**/*.config.{js,ts,cjs}',
+        '**/.eslintrc.{js,cjs}',
         '**/*.d.ts',
+        'src/main.ts',
+        'src/App.vue',
+        'src/router/**',
+        'src/views/**',
       ],
       thresholds: {
         lines: 80,

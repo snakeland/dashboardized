@@ -115,5 +115,18 @@ describe('Auth Store', () => {
             )
             expect(store.user).toBeNull()
         })
+
+        it('handles logout error', async () => {
+            const store = useAuthStore()
+            const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { })
+
+            global.fetch = vi.fn().mockRejectedValue(new Error('Logout failed'))
+
+            await store.logout()
+
+            expect(consoleSpy).toHaveBeenCalledWith('Logout error:', expect.any(Error))
+            expect(store.user).toBeNull() // Should still clear auth
+            consoleSpy.mockRestore()
+        })
     })
 })
