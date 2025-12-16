@@ -9,6 +9,17 @@ export type {
   WidgetRegistry,
 } from './widget'
 
+// User and authentication types
+export type {
+  User,
+  AuthTokens,
+  AuthSession,
+  LoginCredentials,
+  AuthError,
+  UserProfile,
+  DashboardPreferences,
+} from './user'
+
 // Dashboard configuration
 export interface DashboardConfig {
   userId: string

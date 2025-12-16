@@ -113,8 +113,10 @@ pnpm build
 
 ### In Progress 🚧
 
-- 🚧 **OAuth authentication** (Auth0/Firebase) - [Issue #2](https://github.com/snakeland/dashboardized/issues/2)
+- ✅ **OAuth authentication** (Auth0) - Implemented
 - 🚧 **CI/CD Pipeline** and coverage reporting - [Issue #6](https://github.com/snakeland/dashboardized/issues/6)
+- ✅ **Widget Access Control**: Restricted widgets to logged-in users
+- ✅ **Responsive Layouts**: Widened weather widget for better visibility
 
 ### Planned 🔜
 

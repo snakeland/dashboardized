@@ -13,6 +13,8 @@
     "lint:fix": "eslint . --ext .vue,.ts --fix"
   },
   "dependencies": {
+    "@auth0/auth0-vue": "^2.5.0",
+    "@dashboardized/types": "workspace:*",
     "@dashboardized/ui": "workspace:*",
     "@dashboardized/widgets": "workspace:*",
     "pinia": "^2.1.7",
