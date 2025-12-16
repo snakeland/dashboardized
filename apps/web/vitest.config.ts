@@ -27,6 +27,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
+      '@dashboardized/widgets': resolve(__dirname, '../../packages/widgets/src/index.ts'),
+      '@dashboardized/ui': resolve(__dirname, '../../packages/ui/src/index.ts'),
+      '@dashboardized/types': resolve(__dirname, '../../packages/types/src/index.ts'),
     },
   },
 })
