@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuth } from '../composables/useAuth'
 import { useRouter } from 'vue-router'
-import { WeatherWidget } from '@dashboardized/widgets'
+
 
 const { isAuthenticated, login, logout, user, isLoading } = useAuth()
 const router = useRouter()
@@ -75,14 +75,42 @@ const navigateToDashboard = () => {
     <div class="max-w-7xl mx-auto">
       <!-- Widgets Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Weather Widget - Half Width -->
-        <div class="col-span-1">
-          <WeatherWidget />
+        <!-- Promo Card - Half Width -->
+        <div class="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 flex flex-col items-center justify-center text-center border border-gray-100 dark:border-gray-700">
+          <div class="bg-indigo-100 dark:bg-indigo-900/30 p-4 rounded-full mb-6 relative group overflow-hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-12 w-12 text-indigo-600 dark:text-indigo-400 relative z-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+              />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+            Weather & More
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-8 max-w-sm">
+            Log in to access your personalized dashboard with live weather updates, stock tracking, and custom widgets.
+          </p>
+          <button
+            v-if="!isAuthenticated"
+            class="px-6 py-3 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md transition-colors"
+            @click="login"
+          >
+            Sign In to Unlock
+          </button>
         </div>
 
         <!-- Placeholder for more widgets -->
-        <div class="col-span-1 bg-white rounded-lg shadow-md p-8 flex items-center justify-center border-2 border-dashed border-gray-300">
-          <div class="text-center text-gray-400">
+        <div class="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-700">
+          <div class="text-center text-gray-400 dark:text-gray-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="h-16 w-16 mx-auto mb-4"

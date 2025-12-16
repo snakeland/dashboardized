@@ -159,18 +159,18 @@
           <p class="text-lg text-gray-900 mb-4">
             {{ todayDateFormatted }}
           </p>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-6">
-              <div class="text-8xl">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-6 min-w-0">
+              <div class="text-8xl flex-shrink-0">
                 {{ currentWeatherIcon }}
               </div>
-              <div>
-                <p class="text-3xl font-bold text-gray-900 leading-tight">
+              <div class="min-w-0">
+                <p class="text-3xl font-bold text-gray-900 leading-tight truncate">
                   {{ currentWeatherText }}
                 </p>
               </div>
             </div>
-            <div class="flex flex-col items-end">
+            <div class="flex flex-col items-end flex-shrink-0">
               <p class="text-7xl font-bold text-gray-900 leading-none">
                 {{ Math.round(weatherData.forecast.maxTemperatures[0]) }}°
               </p>

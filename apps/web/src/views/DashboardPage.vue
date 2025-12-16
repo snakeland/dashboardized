@@ -49,14 +49,9 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Placeholder for widgets -->
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            Weather Widget
-          </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400">
-            Widget integration coming soon...
-          </p>
+        <!-- Weather Widget -->
+        <div class="col-span-1 md:col-span-2">
+          <WeatherWidget />
         </div>
 
         <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow border-2 border-dashed border-gray-300 dark:border-gray-600">
@@ -88,6 +83,7 @@
 import { useAuth } from '../composables/useAuth'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
+import { WeatherWidget } from '@dashboardized/widgets'
 
 const { logout } = useAuth()
 const authStore = useAuthStore()
