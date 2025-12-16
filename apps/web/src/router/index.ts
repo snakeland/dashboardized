@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { watch } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+
 
 const routes: RouteRecordRaw[] = [
   {
@@ -38,8 +40,14 @@ router.beforeEach(async (to, _from, next) => {
 
   // Wait for Auth0 to finish loading
   if (auth0.isLoading.value) {
-    // Wait a bit for Auth0 to initialize
-    await new Promise((resolve) => setTimeout(resolve, 100))
+    await new Promise<void>((resolve) => {
+      const unwatch = watch(auth0.isLoading, (isLoading) => {
+        if (!isLoading) {
+          unwatch()
+          resolve()
+        }
+      })
+    })
   }
 
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)

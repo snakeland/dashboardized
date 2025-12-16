@@ -1,10 +1,16 @@
+import 'dotenv/config'
 import express, { Express } from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import authRoutes from './routes/auth'
 import userRoutes from './routes/user'
 
+console.log('Loading environment variables...')
+
 dotenv.config()
+
+console.log('AUTH0_ISSUER_BASE_URL:', process.env.AUTH0_ISSUER_BASE_URL)
+console.log('AUTH0_AUDIENCE:', process.env.AUTH0_AUDIENCE)
 
 const app: Express = express()
 const PORT = process.env.PORT || 3001
