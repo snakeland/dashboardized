@@ -40,8 +40,11 @@ app.use('/api/auth', authRoutes)
 // User routes (protected)
 app.use('/api/user', userRoutes)
 
-app.listen(PORT, () => {
-  console.log(`🚀 API server running on http://localhost:${PORT}`)
-})
+// Only listen if not running in Vercel (or other serverless env)
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 API server running on http://localhost:${PORT}`)
+  })
+}
 
 export default app

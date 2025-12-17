@@ -67,3 +67,5 @@ Thumbs.db
 
 # Prompt files (local AI working files)
 *.prompt.md
+.vercel
+.env*.local
