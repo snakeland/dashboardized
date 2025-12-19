@@ -20,6 +20,7 @@ export default defineConfig({
         'src/App.vue',
         'src/router/**',
         'src/views/**',
+        'src/components/**',
       ],
       thresholds: {
         lines: 80,
