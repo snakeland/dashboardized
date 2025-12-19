@@ -37,6 +37,23 @@
                 </router-link>
                 
                 <!-- Simple Profile / Logout -->
+                <div class="flex items-center gap-3 pr-4">
+                  <div class="text-right hidden sm:block">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                      {{ userName }}
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                      {{ userEmail }}
+                    </p>
+                  </div>
+                  <img
+                    v-if="user?.picture"
+                    :src="user.picture"
+                    :alt="userName"
+                    class="h-10 w-10 rounded-full border-2 border-indigo-100 dark:border-indigo-900/50 shadow-sm object-cover"
+                  >
+                </div>
+                
                 <div class="h-8 w-px bg-gray-200 dark:bg-gray-700 mx-2" />
                 
                 <button
@@ -61,9 +78,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useAuth } from '../composables/useAuth'
+import { useAuthStore } from '../stores/auth'
 import { useRoute } from 'vue-router'
 
 const { isAuthenticated, isLoading, logout } = useAuth()
+const authStore = useAuthStore()
 const $route = useRoute()
+
+const user = computed(() => authStore.user)
+const userName = computed(() => authStore.userName)
+const userEmail = computed(() => authStore.userEmail)
 </script>

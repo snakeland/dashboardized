@@ -6,13 +6,21 @@
     <header class="py-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="md:flex md:items-center md:justify-between">
-          <div class="flex-1 min-w-0">
-            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl tracking-tight">
-              My Dashboard
-            </h2>
-            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              Personalized workspace for {{ userName }} ({{ userEmail }})
-            </p>
+          <div class="flex-1 min-w-0 flex items-center gap-4">
+            <img
+              v-if="user?.picture"
+              :src="user.picture"
+              :alt="userName"
+              class="h-16 w-16 rounded-2xl border-4 border-indigo-50 dark:border-indigo-900/30 shadow-sm shadow-indigo-100"
+            >
+            <div>
+              <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl tracking-tight">
+                My Dashboard
+              </h2>
+              <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                Personalized workspace for {{ userName }} ({{ userEmail }})
+              </p>
+            </div>
           </div>
           <div class="mt-4 flex md:mt-0 md:ml-4 gap-3">
             <button
@@ -69,12 +77,14 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { WeatherWidget } from '@dashboardized/widgets'
 import AppNavbar from '../components/AppNavbar.vue'
 
 const authStore = useAuthStore()
 
-const userName = authStore.userName
-const userEmail = authStore.userEmail
+const user = computed(() => authStore.user)
+const userName = computed(() => authStore.userName)
+const userEmail = computed(() => authStore.userEmail)
 </script>
