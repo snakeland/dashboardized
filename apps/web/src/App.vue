@@ -36,6 +36,7 @@ watch(
         if (authStore.user) {
           authStore.setUser({
             ...authStore.user,
+            email: user.email || authStore.user.email,
             name: user.name || authStore.user.name,
             picture: user.picture || authStore.user.picture,
           })
